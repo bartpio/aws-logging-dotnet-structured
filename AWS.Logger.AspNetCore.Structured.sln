@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28306.52
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AWS.Logger.AspNetCore.Structured", "src\AWS.Logger.AspNetCore.Structured\AWS.Logger.AspNetCore.Structured.csproj", "{35CCC916-50E9-4E30-9E99-87B83FF30EAB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AWS.Logger.AspNetCore.Structured.Tests", "test\AWS.Logger.AspNetCore.Structured.Tests\AWS.Logger.AspNetCore.Structured.Tests.csproj", "{BD274A1D-1965-46BD-88C3-60FB76AA5067}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{35CCC916-50E9-4E30-9E99-87B83FF30EAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35CCC916-50E9-4E30-9E99-87B83FF30EAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35CCC916-50E9-4E30-9E99-87B83FF30EAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35CCC916-50E9-4E30-9E99-87B83FF30EAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD274A1D-1965-46BD-88C3-60FB76AA5067}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD274A1D-1965-46BD-88C3-60FB76AA5067}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD274A1D-1965-46BD-88C3-60FB76AA5067}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD274A1D-1965-46BD-88C3-60FB76AA5067}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {47F5ADAF-E12C-4320-9E0F-BC55D962D782}
+	EndGlobalSection
+EndGlobal
