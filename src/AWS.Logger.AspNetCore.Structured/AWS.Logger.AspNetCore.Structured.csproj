@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Bart Piotrowski</Authors>
+    <Company>Piotrowski</Company>
+    <Description>Structured Logging support suitable for AWS Logging from within AspNetCore. Logs in JSON form, including a rendered message, unary scope properties (tags), and KeyValuePair scope properties. An extention method is provided to register a structed AWS log provider; other than that there's no real AWS dependency here. The AWS Logging configuration provided should NOT include a custom formatter.</Description>
+    <Copyright>(c) 2019 Bart Piotrowski</Copyright>
+    <PackageLicenseUrl>https://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
+    <PackageReleaseNotes>Initial alpha</PackageReleaseNotes>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AWS.Logger.AspNetCore" Version="1.4.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="2.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.1.1" />
+    <PackageReference Include="newtonsoft.json" Version="10.0.3" />
+    <PackageReference Include="system.collections.immutable" Version="1.3.1" />
+  </ItemGroup>
+
+</Project>
