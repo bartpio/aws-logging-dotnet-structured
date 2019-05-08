@@ -30,19 +30,31 @@ namespace AWS.Logger.AspNetCore.Structured
         }
 
         /// <summary>
+        /// yes, we deal with LogScope.Current in ReRender
+        /// </summary>
+        bool IAugmentingRenderer.RendersLogScope => true;
+
+        /// <summary>
         /// Re-render a previously rendered raw msg in a JSON form
         /// </summary>
         /// <param name="logLevel"></param>
         /// <param name="eventId"></param>
         /// <param name="prerendered"></param>
         /// <param name="state"></param>
+        /// <param name="includeScopes">true if instructed to include scopes</param>
         /// <param name="exception"></param>
         /// <param name="categoryName"></param>
         /// <param name="cfg"></param>
         /// <returns>JSON-form, with "msg" property bearing the original msg</returns>
-        string IAugmentingRenderer.ReRender(LogLevel logLevel, EventId eventId, string prerendered, object state, Exception exception, string categoryName, IConfiguration cfg)
+        string IAugmentingRenderer.ReRender(LogLevel logLevel, EventId eventId, string prerendered, object state, bool includeScopes, Exception exception, string categoryName, IConfiguration cfg)
         {
-            var scopes = LogScope.Current?.EnumerateScopes() ?? ImmutableList<object>.Empty;
+            LogScope lsc = null;
+            if (includeScopes)
+            {
+                lsc = LogScope.Current;
+            }
+
+            var scopes = lsc?.EnumerateScopes() ?? ImmutableList<object>.Empty;
             var (unaries, groupedPairs) = scopes.EvaluateLogstate();
             var obj = new { logLevel, categoryName, msg = prerendered, exception, eventId, tags = unaries, scope = groupedPairs };
             using (var ms = new MemoryStream())
