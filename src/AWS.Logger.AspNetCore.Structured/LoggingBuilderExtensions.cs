@@ -52,9 +52,12 @@ namespace AWS.Logger.AspNetCore.Structured
             {
                 var structuredRenderer = new StructuredRenderer(_lazyjss.Value);
                 (var awsConfig, var includeScopes) = awsSection.GetAWSLoggingConfigSection(configSectionInfoBlockName).ProcessIncludeScopes(structuredRenderer);
-                var awsProvider = new AWSLoggerProvider(awsConfig);
-                var augmentedProvider = new AugmentingLoggerProvider(awsProvider, structuredRenderer, awsSection) { IncludeScopes = includeScopes };
-                loggingBuilder.AddProvider(augmentedProvider); //We add the AUGMENTED provider.
+                if (awsConfig != null)
+                {
+                    var awsProvider = new AWSLoggerProvider(awsConfig);
+                    var augmentedProvider = new AugmentingLoggerProvider(awsProvider, structuredRenderer, awsSection) { IncludeScopes = includeScopes };
+                    loggingBuilder.AddProvider(augmentedProvider); //We add the AUGMENTED provider.
+                }
             }
 
             //Return the same Logging Builder that was passed in
@@ -75,9 +78,12 @@ namespace AWS.Logger.AspNetCore.Structured
             if (awsSection != null)
             {
                 (var awsConfig, var includeScopes) = awsSection.GetAWSLoggingConfigSection(configSectionInfoBlockName).ProcessIncludeScopes(augmentedRenderer);
-                var awsProvider = new AWSLoggerProvider(awsConfig);
-                var augmentedProvider = new AugmentingLoggerProvider(awsProvider, augmentedRenderer, awsSection) { IncludeScopes = includeScopes };
-                loggingBuilder.AddProvider(augmentedProvider); //We add the AUGMENTED provider.
+                if (awsConfig != null)
+                {
+                    var awsProvider = new AWSLoggerProvider(awsConfig);
+                    var augmentedProvider = new AugmentingLoggerProvider(awsProvider, augmentedRenderer, awsSection) { IncludeScopes = includeScopes };
+                    loggingBuilder.AddProvider(augmentedProvider); //We add the AUGMENTED provider.
+                }
             }
 
             //Return the same Logging Builder that was passed in
@@ -107,14 +113,21 @@ namespace AWS.Logger.AspNetCore.Structured
         /// <returns>the same awsConfig passed in; possibly mutated! also, original value of IncludeScopes</returns>
         internal static (AWSLoggerConfigSection, bool) ProcessIncludeScopes(this AWSLoggerConfigSection awsConfig, IAugmentingRenderer augmenter)
         {
-            var originalIncludeScopes = awsConfig.IncludeScopes;
-
-            if (augmenter.RendersLogScope)
+            if (awsConfig != null)
             {
-                awsConfig.IncludeScopes = false;
-            }
+                var originalIncludeScopes = awsConfig.IncludeScopes;
 
-            return (awsConfig, originalIncludeScopes);
+                if (augmenter.RendersLogScope)
+                {
+                    awsConfig.IncludeScopes = false;
+                }
+
+                return (awsConfig, originalIncludeScopes);
+            }
+            else
+            {
+                return (null, false);
+            }
         }
     }
 }
