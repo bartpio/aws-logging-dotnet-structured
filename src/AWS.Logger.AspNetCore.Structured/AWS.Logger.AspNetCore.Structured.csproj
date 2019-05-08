@@ -12,8 +12,8 @@
     <PackageId>BPP.AWS.Logger.AspNetCore.Structured</PackageId>
     <PackageProjectUrl>https://github.com/bartpio/aws-logging-dotnet-structured</PackageProjectUrl>
     <RepositoryUrl>https://github.com/bartpio/aws-logging-dotnet-structured</RepositoryUrl>
-    <PackageTags>aws logging</PackageTags>
-    <Version>1.0.3</Version>
+    <PackageTags>unary tags using delimited list</PackageTags>
+    <Version>1.0.4</Version>
   </PropertyGroup>
 
   <ItemGroup>

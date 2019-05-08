@@ -56,7 +56,8 @@ namespace AWS.Logger.AspNetCore.Structured
 
             var scopes = lsc?.EnumerateScopes() ?? ImmutableList<object>.Empty;
             var (unaries, groupedPairs) = scopes.EvaluateLogstate();
-            var obj = new { logLevel, categoryName, msg = prerendered, exception, eventId, tags = unaries, scope = groupedPairs };
+            var taglist = string.Join(";", unaries);  //cloudwatch insights can search delimited taglist more easily than a proper JSON array.
+            var obj = new { logLevel, categoryName, msg = prerendered, exception, eventId, tags = taglist, scope = groupedPairs };
             using (var ms = new MemoryStream())
             {
                 using (var sw = new StreamWriter(ms))
