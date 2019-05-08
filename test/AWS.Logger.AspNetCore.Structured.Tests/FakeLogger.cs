@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Text;
+using System.IO;
 
 namespace AWS.Logger.AspNetCore.Structured.Tests
 {
@@ -18,7 +20,7 @@ namespace AWS.Logger.AspNetCore.Structured.Tests
         /// <returns></returns>
         public IDisposable BeginScope<TState>(TState state)
         {
-            throw new NotImplementedException("fake beginscope is not allowed");
+            return new MemoryStream();  //a totally fake scope! for unit purposes only
         }
 
         /// <summary>

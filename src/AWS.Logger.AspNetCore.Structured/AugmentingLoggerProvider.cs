@@ -34,6 +34,11 @@ namespace AWS.Logger.AspNetCore.Structured
         }
 
         /// <summary>
+        /// if set we'll include scopes
+        /// </summary>
+        public bool IncludeScopes { get; set; }
+
+        /// <summary>
         /// create a logger. it will be of an augmented form.
         /// </summary>
         /// <param name="categoryName"></param>
@@ -41,13 +46,7 @@ namespace AWS.Logger.AspNetCore.Structured
         ILogger ILoggerProvider.CreateLogger(string categoryName)
         {
             var underlyingLogger = _loggerProvider.CreateLogger(categoryName);
-            var uaws = underlyingLogger as AWSLogger;
-            if (uaws != null)
-            {
-                uaws.IncludeScopes = false;
-            }
-
-            return new LoggerWrapper(underlyingLogger, _augrenderer, categoryName, _cfg);
+            return new LoggerWrapper(underlyingLogger, _augrenderer, categoryName, _cfg) { IncludeScopes = IncludeScopes };
         }
 
         #region IDisposable Support
@@ -73,69 +72,6 @@ namespace AWS.Logger.AspNetCore.Structured
         }
         #endregion
 
-        /// <summary>
-        /// logger wrapperclass
-        /// </summary>
-        internal class LoggerWrapper : ILogger
-        {
-            private readonly ILogger _logger;
-            private readonly IAugmentingRenderer _augrenderer;
-            private readonly string _category;
-            private readonly IConfiguration _cfg;
-
-            /// <summary>
-            /// wrap
-            /// </summary>
-            /// <param name="logger"></param>
-            /// <param name="augrenderer"></param>
-            /// <param name="category"></param>
-            /// <param name="cfg"></param>
-            public LoggerWrapper(ILogger logger, IAugmentingRenderer augrenderer, string category, IConfiguration cfg)
-            {
-                _logger = logger;
-                _augrenderer = augrenderer;
-                _category = category;
-                _cfg = cfg;
-            }
-
-            /// <summary>
-            /// begin a scope
-            /// </summary>
-            /// <typeparam name="TState"></typeparam>
-            /// <param name="state"></param>
-            /// <returns></returns>
-            public IDisposable BeginScope<TState>(TState state)
-            {
-                return LogScope.Push(_category, state);
-            }
-
-            /// <summary>
-            /// is enabled?
-            /// </summary>
-            /// <param name="logLevel"></param>
-            /// <returns></returns>
-            public bool IsEnabled(LogLevel logLevel)
-            {
-                return _logger.IsEnabled(logLevel);
-            }
-
-            /// <summary>
-            /// log a msg
-            /// </summary>
-            /// <typeparam name="TState"></typeparam>
-            /// <param name="logLevel"></param>
-            /// <param name="eventId"></param>
-            /// <param name="_state"></param>
-            /// <param name="_exception"></param>
-            /// <param name="formatter"></param>
-            public void Log<TState>(LogLevel logLevel, EventId eventId, TState _state, Exception _exception, Func<TState, Exception, string> formatter)
-            {
-                _logger.Log(logLevel, eventId, _state, _exception, (state, exception) =>
-                {
-                    var prerendered = formatter(state, exception);
-                    return _augrenderer.ReRender(logLevel, eventId, prerendered, _state, exception, _category, _cfg);
-                });
-            }
-        }
+       
     }
 }

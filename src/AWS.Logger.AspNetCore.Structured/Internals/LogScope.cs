@@ -10,7 +10,7 @@ namespace AWS.Logger.AspNetCore.Structured.Internals
     /// logscope tracker
     /// it's rather (really a lot) like https://github.com/aws/aws-logging-dotnet/blob/858b71127bd9146fe7fe75bdeca03e0874ae7027/src/AWS.Logger.AspNetCore/AWSLogScope.cs
     /// </summary>
-    internal class LogScope
+    public class LogScope
     {
         /// <summary>
         /// operationscoped singleton via AsyncLocal
