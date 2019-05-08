@@ -44,13 +44,14 @@ namespace AWS.Logger.AspNetCore.Structured
         /// </summary>
         /// <param name="loggingBuilder">dotnet Logging Builder</param>
         /// <param name="awsSection">"AWS" section of the configuration</param>
+        /// <param name="configSectionInfoBlockName">config section info block name, ex. AWS.Logging or AWS</param>
         /// <returns>The same Logging Builder that was passed in</returns>
-        public static ILoggingBuilder AddAwsLoggingStructured(this ILoggingBuilder loggingBuilder, IConfigurationSection awsSection)
+        public static ILoggingBuilder AddAwsLoggingStructured(this ILoggingBuilder loggingBuilder, IConfigurationSection awsSection, string configSectionInfoBlockName)
         {
             if (awsSection != null)
             {
                 var structuredRenderer = new StructuredRenderer(_lazyjss.Value);
-                (var awsConfig, var includeScopes) = awsSection.GetAWSLoggingConfigSection().ProcessIncludeScopes(structuredRenderer);
+                (var awsConfig, var includeScopes) = awsSection.GetAWSLoggingConfigSection(configSectionInfoBlockName).ProcessIncludeScopes(structuredRenderer);
                 var awsProvider = new AWSLoggerProvider(awsConfig);
                 var augmentedProvider = new AugmentingLoggerProvider(awsProvider, structuredRenderer, awsSection) { IncludeScopes = includeScopes };
                 loggingBuilder.AddProvider(augmentedProvider); //We add the AUGMENTED provider.
@@ -65,14 +66,15 @@ namespace AWS.Logger.AspNetCore.Structured
         /// </summary>
         /// <typeparam name="TAugmenter"></typeparam>
         /// <param name="loggingBuilder"></param>
+        /// <param name="configSectionInfoBlockName">config section info block name, ex. AWS.Logging or AWS</param>
         /// <param name="awsSection"></param>
         /// <param name="augmentedRenderer">the IAugmentingRenderer instance to use</param>
         /// <returns>same ILoggingBuilder that was passed</returns>
-        public static ILoggingBuilder AddAwsLogging<TAugmenter>(this ILoggingBuilder loggingBuilder, IConfigurationSection awsSection, TAugmenter augmentedRenderer) where TAugmenter :  IAugmentingRenderer
+        public static ILoggingBuilder AddAwsLogging<TAugmenter>(this ILoggingBuilder loggingBuilder, IConfigurationSection awsSection, string configSectionInfoBlockName, TAugmenter augmentedRenderer) where TAugmenter :  IAugmentingRenderer
         {
             if (awsSection != null)
             {
-                (var awsConfig, var includeScopes) = awsSection.GetAWSLoggingConfigSection().ProcessIncludeScopes(augmentedRenderer);
+                (var awsConfig, var includeScopes) = awsSection.GetAWSLoggingConfigSection(configSectionInfoBlockName).ProcessIncludeScopes(augmentedRenderer);
                 var awsProvider = new AWSLoggerProvider(awsConfig);
                 var augmentedProvider = new AugmentingLoggerProvider(awsProvider, augmentedRenderer, awsSection) { IncludeScopes = includeScopes };
                 loggingBuilder.AddProvider(augmentedProvider); //We add the AUGMENTED provider.
@@ -88,12 +90,13 @@ namespace AWS.Logger.AspNetCore.Structured
         /// e.g. WARN [SomeNameSpace.Class] - Something Happened</returns>
         /// </summary>
         /// <param name="loggingBuilder"></param>
+        /// <param name="configSectionInfoBlockName">config section info block name, ex. AWS.Logging or AWS</param>
         /// <param name="awsSection"></param>
         /// <returns>same ILoggingBuilder that was passed</returns>
-        public static ILoggingBuilder AddAwsLoggingSimple(this ILoggingBuilder loggingBuilder, IConfigurationSection awsSection)
+        public static ILoggingBuilder AddAwsLoggingSimple(this ILoggingBuilder loggingBuilder, string configSectionInfoBlockName, IConfigurationSection awsSection)
         {
             var augmentedRenderer = new SimpleRenderer();
-            return AddAwsLogging(loggingBuilder, awsSection, augmentedRenderer);
+            return AddAwsLogging(loggingBuilder, awsSection, configSectionInfoBlockName, augmentedRenderer);
         }
 
         /// <summary>
