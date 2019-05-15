@@ -13,7 +13,7 @@
     <PackageProjectUrl>https://github.com/bartpio/aws-logging-dotnet-structured</PackageProjectUrl>
     <RepositoryUrl>https://github.com/bartpio/aws-logging-dotnet-structured</RepositoryUrl>
     <PackageTags>unary tags using delimited list</PackageTags>
-    <Version>1.0.4</Version>
+    <Version>1.0.5</Version>
   </PropertyGroup>
 
   <ItemGroup>
