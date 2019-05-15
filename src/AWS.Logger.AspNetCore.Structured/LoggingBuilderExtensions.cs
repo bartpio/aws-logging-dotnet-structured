@@ -45,8 +45,9 @@ namespace AWS.Logger.AspNetCore.Structured
         /// <param name="loggingBuilder">dotnet Logging Builder</param>
         /// <param name="awsSection">"AWS" section of the configuration</param>
         /// <param name="configSectionInfoBlockName">config section info block name, ex. AWS.Logging or AWS</param>
+        /// <param name="awsLoggerConfigAction">optional aws logger reconfigurator action</param>
         /// <returns>The same Logging Builder that was passed in</returns>
-        public static ILoggingBuilder AddAwsLoggingStructured(this ILoggingBuilder loggingBuilder, IConfigurationSection awsSection, string configSectionInfoBlockName)
+        public static ILoggingBuilder AddAwsLoggingStructured(this ILoggingBuilder loggingBuilder, IConfigurationSection awsSection, string configSectionInfoBlockName, Action<AWSLoggerConfig> awsLoggerConfigAction = null)
         {
             if (awsSection != null)
             {
@@ -54,6 +55,7 @@ namespace AWS.Logger.AspNetCore.Structured
                 (var awsConfig, var includeScopes) = awsSection.GetAWSLoggingConfigSection(configSectionInfoBlockName).ProcessIncludeScopes(structuredRenderer);
                 if (awsConfig != null)
                 {
+                    awsLoggerConfigAction?.Invoke(awsConfig.Config);
                     var awsProvider = new AWSLoggerProvider(awsConfig);
                     var augmentedProvider = new AugmentingLoggerProvider(awsProvider, structuredRenderer, awsSection) { IncludeScopes = includeScopes };
                     loggingBuilder.AddProvider(augmentedProvider); //We add the AUGMENTED provider.
@@ -72,8 +74,9 @@ namespace AWS.Logger.AspNetCore.Structured
         /// <param name="configSectionInfoBlockName">config section info block name, ex. AWS.Logging or AWS</param>
         /// <param name="awsSection"></param>
         /// <param name="augmentedRenderer">the IAugmentingRenderer instance to use</param>
+        /// <param name="awsLoggerConfigAction">optional aws logger reconfigurator action</param>
         /// <returns>same ILoggingBuilder that was passed</returns>
-        public static ILoggingBuilder AddAwsLogging<TAugmenter>(this ILoggingBuilder loggingBuilder, IConfigurationSection awsSection, string configSectionInfoBlockName, TAugmenter augmentedRenderer) where TAugmenter :  IAugmentingRenderer
+        public static ILoggingBuilder AddAwsLogging<TAugmenter>(this ILoggingBuilder loggingBuilder, IConfigurationSection awsSection, string configSectionInfoBlockName, TAugmenter augmentedRenderer, Action<AWSLoggerConfig> awsLoggerConfigAction = null) where TAugmenter :  IAugmentingRenderer
         {
             if (awsSection != null)
             {
@@ -98,8 +101,9 @@ namespace AWS.Logger.AspNetCore.Structured
         /// <param name="loggingBuilder"></param>
         /// <param name="configSectionInfoBlockName">config section info block name, ex. AWS.Logging or AWS</param>
         /// <param name="awsSection"></param>
+        /// <param name="awsLoggerConfigAction">optional aws logger reconfigurator action</param>
         /// <returns>same ILoggingBuilder that was passed</returns>
-        public static ILoggingBuilder AddAwsLoggingSimple(this ILoggingBuilder loggingBuilder, string configSectionInfoBlockName, IConfigurationSection awsSection)
+        public static ILoggingBuilder AddAwsLoggingSimple(this ILoggingBuilder loggingBuilder, string configSectionInfoBlockName, IConfigurationSection awsSection, Action<AWSLoggerConfig> awsLoggerConfigAction = null)
         {
             var augmentedRenderer = new SimpleRenderer();
             return AddAwsLogging(loggingBuilder, awsSection, configSectionInfoBlockName, augmentedRenderer);
