@@ -68,19 +68,25 @@ namespace AWS.Logger.AspNetCore.Structured.Internals
 
         /// <summary>
         /// log a msg
+        /// uses wrapped logger for an initial rendering
+        /// then, the re-renderer takes a pass
         /// </summary>
         /// <typeparam name="TState"></typeparam>
         /// <param name="logLevel"></param>
         /// <param name="eventId"></param>
-        /// <param name="_state"></param>
-        /// <param name="_exception"></param>
+        /// <param name="passedState"></param>
+        /// <param name="passedException"></param>
         /// <param name="formatter"></param>
-        public void Log<TState>(LogLevel logLevel, EventId eventId, TState _state, Exception _exception, Func<TState, Exception, string> formatter)
+        public void Log<TState>(LogLevel logLevel, EventId eventId, TState passedState, Exception passedException, Func<TState, Exception, string> formatter)
         {
-            _logger.Log(logLevel, eventId, _state, _exception, (state, exception) =>
+            const Exception dummyException = null;
+
+            _logger.Log(logLevel, eventId, passedState, dummyException, (arrowState, arrowException) =>
             {
-                var prerendered = formatter(state, exception);
-                return _augrenderer.ReRender(logLevel, eventId, prerendered, _state, IncludeScopes, exception, _category, _cfg);
+                var prerendered = formatter(arrowState, arrowException);
+                
+                // the real exception is dealt with by the re-renderer ONLY.
+                return _augrenderer.ReRender(logLevel, eventId, prerendered, passedState, IncludeScopes, passedException, _category, _cfg);
             });
         }
     }
