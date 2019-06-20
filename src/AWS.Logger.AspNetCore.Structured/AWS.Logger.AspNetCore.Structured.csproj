@@ -8,12 +8,12 @@
     <Description>Structured Logging support suitable for AWS Logging from within AspNetCore. Logs in JSON form, including a rendered message, unary scope properties (tags), and KeyValuePair scope properties. An extention method is provided to register a structed AWS log provider; other than that there's no real AWS dependency here. The AWS Logging configuration provided should NOT include a custom formatter.</Description>
     <Copyright>(c) 2019 Bart Piotrowski</Copyright>
     <PackageLicenseUrl>https://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
-    <PackageReleaseNotes>bugfixes in extensions, smaller exception output</PackageReleaseNotes>
+    <PackageReleaseNotes>don't write copy of exception after structured part</PackageReleaseNotes>
     <PackageId>BPP.AWS.Logger.AspNetCore.Structured</PackageId>
     <PackageProjectUrl>https://github.com/bartpio/aws-logging-dotnet-structured</PackageProjectUrl>
     <RepositoryUrl>https://github.com/bartpio/aws-logging-dotnet-structured</RepositoryUrl>
     <PackageTags>unary tags using delimited list</PackageTags>
-    <Version>1.0.6</Version>
+    <Version>1.0.7</Version>
   </PropertyGroup>
   <PropertyGroup>
     <IncludeSymbols>true</IncludeSymbols>
